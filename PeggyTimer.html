@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peggy下班倒計時器1.0</title>
+  <style>
+      body {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          background-color: #f0e4d7;
+          font-family: 'Arial', sans-serif;
+          color: #333;
+          text-align: center;
+      }
+      .cat {
+          font-size: 100px;
+          animation: bounce 1s infinite;
+      }
+      .countdown {
+          font-size: 48px;
+          margin-top: 20px;
+          transition: color 0.5s;
+      }
+      @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-20px); }
+      }
+      .date {
+          font-size: 24px;
+          margin-top: 10px;
+      }
+  </style>
+</head>
+<body>
+  <div>
+      <div class="cat">🐱</div>
+      <div class="countdown" id="timer">倒計時：00:00:00</div>
+      <div class="date" id="currentDate">2025年5月10日 星期六</div>
+      <input type="time" id="setTime" value="21:00">
+      <button onclick="setEndTime()">設定下班時間</button>
+  </div>
+  <script>
+      let endTime = new Date();
+      endTime.setHours(21, 0, 0); // 預設下班時間為下午9時
+
+      function updateCountdown() {
+          const now = new Date();
+          const timeRemaining = endTime - now;
+
+          if (timeRemaining <= 0) {
+              document.getElementById('timer').innerHTML = "下班囉！";
+              clearInterval(countdownInterval);
+              return;
+          }
+
+          const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+          document.getElementById('timer').innerHTML = `倒計時：${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
+
+      function setEndTime() {
+          const timeInput = document.getElementById('setTime').value;
+          const [hours, minutes] = timeInput.split(':');
+          endTime.setHours(hours, minutes, 0);
+          updateCountdown(); // 更新倒計時
+      }
+
+      const countdownInterval = setInterval(updateCountdown, 1000);
+      updateCountdown(); // 初始呼叫
+  </script>
+</body>
+</html>
