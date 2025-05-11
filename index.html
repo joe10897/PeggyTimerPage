@@ -156,7 +156,7 @@
               <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
           </a>
           <a href="https://www.canva.com/" target="_blank">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Canva_Logo.svg" alt="Canva">
+              <img src="https://www.pikpng.com/pngl/m/518-5182949_canva-canva-logo-vector-clipart.png" alt="Canva">
           </a>
           <a href="https://www.facebook.com/" target="_blank">
               <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
@@ -181,9 +181,9 @@
 
       let endTime = new Date();
       endTime.setHours(21, 0, 0); // 預設下班時間為下午9時
-      let clients = [];
-      let tasks = [];
-      let history = [];
+      let clients = JSON.parse(localStorage.getItem('clients')) || [];
+      let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+      let history = JSON.parse(localStorage.getItem('history')) || [];
 
       function updateCountdown() {
           const now = new Date();
@@ -220,6 +220,7 @@
           const clientTime = document.getElementById('clientTime').value;
           if (clientName && clientTime) {
               clients.push({ name: clientName, time: clientTime, completed: false });
+              localStorage.setItem('clients', JSON.stringify(clients)); // 儲存到 localStorage
               updateClientList();
               alert(`已新增預約客戶：${clientName}，預約時間：${clientTime}`);
           } else {
@@ -240,6 +241,7 @@
       function completeClient(index) {
           const completedClient = clients.splice(index, 1)[0]; // 移除客戶並獲取其資料
           history.push(`客戶 ${completedClient.name} 已完成，預約時間：${completedClient.time}`);
+          localStorage.setItem('clients', JSON.stringify(clients)); // 更新 localStorage
           updateHistory();
           updateClientList();
           alert(`客戶 ${completedClient.name} 已標記為完成並移至歷史記錄！`);
@@ -249,6 +251,7 @@
           const taskInput = document.getElementById('taskInput').value;
           if (taskInput) {
               tasks.push(taskInput);
+              localStorage.setItem('tasks', JSON.stringify(tasks)); // 儲存到 localStorage
               document.getElementById('taskInput').value = '';
               updateTaskList();
           } else {
@@ -263,12 +266,14 @@
 
       function removeTask(index) {
           tasks.splice(index, 1);
+          localStorage.setItem('tasks', JSON.stringify(tasks)); // 更新 localStorage
           updateTaskList();
       }
 
       function updateHistory() {
           const historyDiv = document.getElementById('history');
           historyDiv.innerHTML = history.map(item => `<div>${item}</div>`).join('');
+          localStorage.setItem('history', JSON.stringify(history)); // 儲存到 localStorage
       }
 
       function updateDate() {
@@ -282,6 +287,8 @@
       updateCountdown(); // 初始呼叫
       updateDate(); // 初始呼叫
       fetchWeather(); // 獲取天氣資訊
+      updateClientList(); // 更新客戶列表
+      updateHistory(); // 更新歷史記錄
   </script>
 </body>
 </html>
