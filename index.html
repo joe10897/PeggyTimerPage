@@ -147,7 +147,7 @@
 
       <div class="section">
           <h3>歷史記錄</h3>
-          <div id="history"></d iv>
+          <div id="history"></div>
       </div>
 
       <div class="tools">
@@ -156,7 +156,7 @@
               <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram">
           </a>
           <a href="https://www.canva.com/" target="_blank">
-              <img src="https://www.pikpng.com/pngl/m/518-5182949_canva-canva-logo-vector-clipart.png" alt="Canva">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Canva_Logo.svg" alt="Canva">
           </a>
           <a href="https://www.facebook.com/" target="_blank">
               <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
@@ -271,8 +271,16 @@
           historyDiv.innerHTML = history.map(item => `<div>${item}</div>`).join('');
       }
 
+      function updateDate() {
+          const now = new Date();
+          const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+          document.getElementById('currentDate').innerHTML = now.toLocaleDateString('zh-TW', options);
+      }
+
       const countdownInterval = setInterval(updateCountdown, 1000);
+      const dateInterval = setInterval(updateDate, 1000);
       updateCountdown(); // 初始呼叫
+      updateDate(); // 初始呼叫
       fetchWeather(); // 獲取天氣資訊
   </script>
 </body>
